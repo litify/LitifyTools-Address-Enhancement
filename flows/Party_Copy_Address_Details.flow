@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>Assigns new shipping address values according to the billing address.</description>
+        <name>Billing_To_Shipping_Assignment</name>
+        <label>Billing To Shipping Assignment</label>
+        <locationX>733</locationX>
+        <locationY>504</locationY>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.ShippingStreet</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.BillingStreet</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.ShippingCity</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.BillingCity</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.ShippingPostalCode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.BillingPostalCode</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.ShippingState</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.BillingState</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.Shipping_County__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.Billing_County__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.ShippingCountry</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.BillingCountry</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Current_Party</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Assigns new billing address values according to the shipping address.</description>
+        <name>Shipping_To_Billing_Assignment</name>
+        <label>Shipping To Billing Assignment</label>
+        <locationX>729</locationX>
+        <locationY>259</locationY>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.BillingStreet</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.ShippingStreet</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.BillingCity</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.ShippingCity</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.BillingPostalCode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.ShippingPostalCode</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.BillingState</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.ShippingState</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.Billing_County__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.Shipping_County__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentParty.BillingCountry</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordCurrentParty.ShippingCountry</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Current_Party</targetReference>
+        </connector>
+    </assignments>
+    <choices>
+        <description>The action of Copy Billing Address details to Shipping was chosen.</description>
+        <name>choiceBillingToShipping</name>
+        <choiceText>Copy Billing Address details to Shipping</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>billingToShipping</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <description>The action of Copy Shipping Address details to Billing was chosen.</description>
+        <name>choiceShippingToBilling</name>
+        <choiceText>Copy Shipping Address details to Billing</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>shippingToBilling</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <description>Check the selected action.</description>
+        <name>Action_Check</name>
+        <label>Action Check</label>
+        <locationX>302</locationX>
+        <locationY>389</locationY>
+        <defaultConnector>
+            <targetReference>Shipping_To_Billing_Preview</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Shipping To Billing</defaultConnectorLabel>
+        <rules>
+            <name>Billing_To_Shipping</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Please_select_action_to_perform</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>choiceBillingToShipping</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Billing_To_Shipping_Preview</targetReference>
+            </connector>
+            <label>Billing To Shipping</label>
+        </rules>
+    </decisions>
+    <description>Flow allows copying Party Shipping Address Details to Billing and vise versa</description>
+    <interviewLabel>Party: Copy Address Details {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Party: Copy Address Details</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <description>Get a record of the current Party.</description>
+        <name>Get_Current_Party</name>
+        <label>Get Current Party</label>
+        <locationX>50</locationX>
+        <locationY>387</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Action_Check</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <object>Account</object>
+        <outputReference>varRecordCurrentParty</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>ShippingCountry</queriedFields>
+        <queriedFields>ShippingCity</queriedFields>
+        <queriedFields>ShippingStreet</queriedFields>
+        <queriedFields>ShippingState</queriedFields>
+        <queriedFields>ShippingPostalCode</queriedFields>
+        <queriedFields>Shipping_County__c</queriedFields>
+        <queriedFields>BillingStreet</queriedFields>
+        <queriedFields>BillingCity</queriedFields>
+        <queriedFields>BillingCountry</queriedFields>
+        <queriedFields>Billing_County__c</queriedFields>
+        <queriedFields>BillingPostalCode</queriedFields>
+        <queriedFields>BillingState</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <description>Updates the address details of the current Party.</description>
+        <name>Update_Current_Party</name>
+        <label>Update Current Party</label>
+        <locationX>899</locationX>
+        <locationY>390</locationY>
+        <connector>
+            <targetReference>Success_Screen</targetReference>
+        </connector>
+        <inputReference>varRecordCurrentParty</inputReference>
+    </recordUpdates>
+    <screens>
+        <description>Preview changes to the address details of the Party record.</description>
+        <name>Billing_To_Shipping_Preview</name>
+        <label>Billing To Shipping Preview</label>
+        <locationX>561</locationX>
+        <locationY>504</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Billing_To_Shipping_Assignment</targetReference>
+        </connector>
+        <fields>
+            <name>PreviewBillingToShipping</name>
+            <fieldText>&lt;p&gt;&lt;b style=&quot;font-size: 14px; color: rgb(0, 0, 0);&quot;&gt;You are going to update &lt;/b&gt;&lt;b style=&quot;font-size: 14px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Shipping&lt;/b&gt;&lt;b style=&quot;font-size: 14px; color: rgb(0, 0, 0);&quot;&gt; Address details with current &lt;/b&gt;&lt;b style=&quot;font-size: 14px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Billing&lt;/b&gt;&lt;b style=&quot;font-size: 14px; color: rgb(0, 0, 0);&quot;&gt; Address details. Please, review information below and click &apos;Next&apos; button to process:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;Shipping Street Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingStreet}&lt;/span&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); font-size: 12px; background-color: rgb(255, 255, 255);&quot;&gt;Shipping Street New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingStreet}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;---&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 12px;&quot;&gt;Shipping City Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingCity}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 12px;&quot;&gt;Shipping City New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingCity}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 12px;&quot;&gt;Shipping Zip/Postal Code Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingPostalCode}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); font-size: 12px; background-color: rgb(255, 255, 255);&quot;&gt;Shipping Zip/Postal Code New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingPostalCode}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); font-size: 12px; background-color: rgb(255, 255, 255);&quot;&gt;Shipping State/Province Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingState}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 12px;&quot;&gt;Shipping State/Province New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingState}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 12px;&quot;&gt;Shipping County Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.Shipping_County__c}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); font-size: 12px; background-color: rgb(255, 255, 255);&quot;&gt;Shipping County New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.Billing_County__c}&lt;/span&gt;&lt;span style=&quot;font-size: 12px; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); font-size: 12px; background-color: rgb(255, 255, 255);&quot;&gt;Shipping Country Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingCountry}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 12px;&quot;&gt;Shipping Country New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingCountry}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Select one of the proposed actions.</description>
+        <name>Select_Action_Screen</name>
+        <label>Select Action Screen</label>
+        <locationX>50</locationX>
+        <locationY>219</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_Current_Party</targetReference>
+        </connector>
+        <fields>
+            <name>Please_select_action_to_perform</name>
+            <choiceReferences>choiceShippingToBilling</choiceReferences>
+            <choiceReferences>choiceBillingToShipping</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Please select action to perform:</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Preview changes to the address details of the Party record.</description>
+        <name>Shipping_To_Billing_Preview</name>
+        <label>Shipping To Billing Preview</label>
+        <locationX>558</locationX>
+        <locationY>259</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Shipping_To_Billing_Assignment</targetReference>
+        </connector>
+        <fields>
+            <name>PreviewShippingToBilling</name>
+            <fieldText>&lt;p&gt;&lt;b style=&quot;font-size: 14px; color: rgb(0, 0, 0);&quot;&gt;You are going to update Billing Address details with current Shipping Address details. Please, review information below and click &apos;Next&apos; button to process:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;Billing Street Old: &lt;/b&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingStreet} &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;Billing Street New: &lt;/b&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingStreet}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;---&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;Billing City Old: &lt;/b&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingCity}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;Billing City New: &lt;/b&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingCity}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;Billing Zip/Postal Code Old: &lt;/b&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingPostalCode} &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;Billing Zip/Postal Code New: &lt;/b&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingPostalCode}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;Billing State/Province Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingState}&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 12px;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;Billing State/Province New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingState}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;Billing County Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.Billing_County__c}&lt;/span&gt;&lt;span style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;Billing County New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.Shipping_County__c}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;--- &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt;Billing Country Old: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.BillingCountry}&lt;/span&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(0, 0, 0);&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 12px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;Billing Country New: &lt;/b&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;{!varRecordCurrentParty.ShippingCountry}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Success message screen.</description>
+        <name>Success_Screen</name>
+        <label>Success Screen</label>
+        <locationX>1116</locationX>
+        <locationY>390</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>SuccessMessage</name>
+            <fieldText>&lt;p&gt;&lt;b style=&quot;font-size: 14px; color: rgb(0, 0, 0);&quot;&gt;Address details were successfully updated! &lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Select_Action_Screen</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Id of the current Party record.</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The record of the current Party.</description>
+        <name>varRecordCurrentParty</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+</Flow>

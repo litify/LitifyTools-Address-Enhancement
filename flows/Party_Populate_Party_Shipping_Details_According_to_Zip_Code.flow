@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>The City value from the Zip Code record to destination record.</description>
+        <name>City_Assignment</name>
+        <label>City Assignment</label>
+        <locationX>621</locationX>
+        <locationY>215</locationY>
+        <assignmentItems>
+            <assignToReference>varTextCityToDestinationRecord</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordZipCode.City__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>State_Check</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>City_Data_To_Account</name>
+        <label>City Data To Account</label>
+        <locationX>1345</locationX>
+        <locationY>484</locationY>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentAccount.ShippingCity</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varTextCityToDestinationRecord</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Acc_State_Check</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>The County value from the Zip Code record to destination record.</description>
+        <name>County_Assignment</name>
+        <label>County Assignment</label>
+        <locationX>796</locationX>
+        <locationY>728</locationY>
+        <assignmentItems>
+            <assignToReference>varTextCountyToDestinationRecord</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordZipCode.County__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>City_Check</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>County_Data_To_Account</name>
+        <label>County Data To Account</label>
+        <locationX>1335</locationX>
+        <locationY>267</locationY>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentAccount.Shipping_County__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varTextCountyToDestinationRecord</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Acc_City_Check</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>State value from the Zip Code record to destination record.</description>
+        <name>State_Assignment</name>
+        <label>State Assignment</label>
+        <locationX>1055</locationX>
+        <locationY>103</locationY>
+        <assignmentItems>
+            <assignToReference>varTextStateToDesctinationRecord</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varRecordZipCode.State__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Acc_County_Check</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>State_Data_To_Account</name>
+        <label>State Data To Account</label>
+        <locationX>1352</locationX>
+        <locationY>669</locationY>
+        <assignmentItems>
+            <assignToReference>varRecordCurrentAccount.ShippingState</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varTextStateToDesctinationRecord</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Party_Update</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Acc_City_Check</name>
+        <label>Acc City Check</label>
+        <locationX>1047</locationX>
+        <locationY>486</locationY>
+        <defaultConnector>
+            <targetReference>Acc_State_Check</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Got_City_From_ZipCode</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTextCityToDestinationRecord</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <connector>
+                <targetReference>City_Data_To_Account</targetReference>
+            </connector>
+            <label>Got City From ZipCode</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Acc_County_Check</name>
+        <label>Acc County Check</label>
+        <locationX>1046</locationX>
+        <locationY>263</locationY>
+        <defaultConnector>
+            <targetReference>Acc_City_Check</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Got_County_From_Zip_Code</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTextCountyToDestinationRecord</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <connector>
+                <targetReference>County_Data_To_Account</targetReference>
+            </connector>
+            <label>Got County From Zip Code</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Acc_State_Check</name>
+        <label>Acc State Check</label>
+        <locationX>1048</locationX>
+        <locationY>681</locationY>
+        <defaultConnector>
+            <targetReference>Party_Update</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Got_State_From_ZipCode</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTextStateToDesctinationRecord</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <connector>
+                <targetReference>State_Data_To_Account</targetReference>
+            </connector>
+            <label>Got State From ZipCode</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is there the City in the Zip Code.</description>
+        <name>City_Check</name>
+        <label>City Check</label>
+        <locationX>568</locationX>
+        <locationY>559</locationY>
+        <defaultConnector>
+            <targetReference>State_Check</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>City Null</defaultConnectorLabel>
+        <rules>
+            <name>City_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varRecordZipCode.City__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Record_City_Check</targetReference>
+            </connector>
+            <label>City Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is there the County in the Zip Code.</description>
+        <name>County_Check</name>
+        <label>County Check</label>
+        <locationX>385</locationX>
+        <locationY>733</locationY>
+        <defaultConnector>
+            <targetReference>City_Check</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>County Null</defaultConnectorLabel>
+        <rules>
+            <name>County_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varRecordZipCode.County__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Record_County_Check</targetReference>
+            </connector>
+            <label>County Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is there the City in the current Party.</description>
+        <name>Record_City_Check</name>
+        <label>Record City Check</label>
+        <locationX>772</locationX>
+        <locationY>394</locationY>
+        <defaultConnector>
+            <targetReference>City_Assignment</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>City Missing</defaultConnectorLabel>
+        <rules>
+            <name>City_Populated</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>varRecordCurrentAccount.ShippingCity</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>State_Check</targetReference>
+            </connector>
+            <label>City Populated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is there the County in the current Party.</description>
+        <name>Record_County_Check</name>
+        <label>Record County Check</label>
+        <locationX>568</locationX>
+        <locationY>733</locationY>
+        <defaultConnector>
+            <targetReference>County_Assignment</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>County Missing</defaultConnectorLabel>
+        <rules>
+            <name>County_Populated</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>varRecordCurrentAccount.Shipping_County__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>City_Check</targetReference>
+            </connector>
+            <label>County Populated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is there the State in the Zip Code.</description>
+        <name>State_Check</name>
+        <label>State Check</label>
+        <locationX>381</locationX>
+        <locationY>389</locationY>
+        <defaultConnectorLabel>State Null</defaultConnectorLabel>
+        <rules>
+            <name>State_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varRecordZipCode.State__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>State_Record_Chack</targetReference>
+            </connector>
+            <label>State Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is there the State in the current Party.</description>
+        <name>State_Record_Chack</name>
+        <label>State Record Check</label>
+        <locationX>381</locationX>
+        <locationY>114</locationY>
+        <defaultConnector>
+            <targetReference>State_Assignment</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>State Missing</defaultConnectorLabel>
+        <rules>
+            <name>State_Populated</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>varRecordCurrentAccount.ShippingState</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Acc_County_Check</targetReference>
+            </connector>
+            <label>State Populated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check if the current Party has the related Zip Code.</description>
+        <name>Zip_Code_Check</name>
+        <label>Zip Code Check</label>
+        <locationX>143</locationX>
+        <locationY>731</locationY>
+        <defaultConnectorLabel>Zip Code Missing</defaultConnectorLabel>
+        <rules>
+            <name>Zip_Code_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varRecordZipCode</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>County_Check</targetReference>
+            </connector>
+            <label>Zip Code Found</label>
+        </rules>
+    </decisions>
+    <interviewLabel>Party: Populate Party Shipping Details According to Zip Code {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Party: Populate Party Shipping Details According to Zip Code</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Current_Party</name>
+        <label>Get Current Party</label>
+        <locationX>151</locationX>
+        <locationY>384</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Zip_Code_Record</targetReference>
+        </connector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <object>Account</object>
+        <outputReference>varRecordCurrentAccount</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>ShippingPostalCode</queriedFields>
+        <queriedFields>ShippingCity</queriedFields>
+        <queriedFields>ShippingState</queriedFields>
+        <queriedFields>Shipping_County__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <description>Get a record from Zip Code database that matches to Shipping Postal Code of the current Party.</description>
+        <name>Get_Zip_Code_Record</name>
+        <label>Get Zip Code Record</label>
+        <locationX>152</locationX>
+        <locationY>579</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Zip_Code_Check</targetReference>
+        </connector>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varTextZipCodeFromRecord</elementReference>
+            </value>
+        </filters>
+        <object>Zip_Code__c</object>
+        <outputReference>varRecordZipCode</outputReference>
+        <queriedFields>County__c</queriedFields>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>City__c</queriedFields>
+        <queriedFields>State__c</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <description>Update the current Party record with new data from Zip Code database.</description>
+        <name>Party_Update</name>
+        <label>Party Update</label>
+        <locationX>1061</locationX>
+        <locationY>892</locationY>
+        <inputReference>varRecordCurrentAccount</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>152</locationX>
+        <locationY>179</locationY>
+        <connector>
+            <targetReference>Get_Current_Party</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Id of current Account record.</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The record of the current Account.</description>
+        <name>varRecordCurrentAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <description>The record of the Zip Code related to the current Account.</description>
+        <name>varRecordZipCode</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Zip_Code__c</objectType>
+    </variables>
+    <variables>
+        <description>Variable for the City value from the Zip Code record.</description>
+        <name>varTextCityToDestinationRecord</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Variable for the County value from the Zip Code record.</description>
+        <name>varTextCountyToDestinationRecord</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Variable for the State value from the Zip Code record.</description>
+        <name>varTextStateToDesctinationRecord</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Zip Code passed via Process from record</description>
+        <name>varTextZipCodeFromRecord</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

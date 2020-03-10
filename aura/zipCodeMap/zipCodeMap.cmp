@@ -1,0 +1,42 @@
+<aura:component implements="force:hasRecordId,flexipage:availableForRecordHome">
+    <!-- attributes -->
+    <aura:attribute name="mapMarkers" type="Object"/>
+    <aura:attribute name="zoomLevel" type="Integer" default="11" />
+    <aura:attribute name="showGoogleLink" type="Boolean" default="true"/>
+    
+    <!-- holds the zip code data -->
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.initOne }"/>
+    
+    <!-- this tag loads the zip code record, no controller needed -->
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Name,Geolocation__Latitude__s,Geolocation__Longitude__s,County__c,State__c"
+                      mode="VIEW"
+                      targetRecord="{!v.record}"
+                      targetError="{!v.recordError}"
+                      recordUpdated="{!c.handleRecordUpdated}"
+                      />
+    
+    <!-- display Lightning Data Service errors, if any -->
+    <aura:if isTrue="{!not(empty(v.recordError))}">
+        <div class="recordError">
+            {!v.recordError}</div>
+    </aura:if>
+    
+    <!-- the map component -->
+    <aura:if isTrue="{!!empty(v.record)}">
+        <aura:if isTrue="{!empty(v.record.fields.Geolocation__Latitude__s.value)||empty(v.record.fields.Geolocation__Longitude__s.value)}">
+        	<div><p><lightning:icon iconName="utility:warning" size="small" variant="warning" alternativeText="Repeat Task" />&nbsp;
+                To calculate distance to clinics from this zip code, please enter the geolocation coordinates.<br/><br/></p></div>
+    	</aura:if>
+        <lightning:map 
+                       mapMarkers="{! v.mapMarkers }" 
+                       zoomLevel="{!v.zoomLevel}" 
+                       showFooter="{!v.showGoogleLink}"/>
+    </aura:if>
+    <div><p><br/><br/><br/></p></div>
+</aura:component>

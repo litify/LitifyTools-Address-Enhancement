@@ -1,0 +1,10 @@
+<design:component  label="Zip Code Record Map">
+	<design:attribute name="zoomLevel" 
+                      label="Zoom Level (0-20)"
+                      default="11" 
+                      description="The default zoom level for the map. 0 is global, 20 is zoomed all the way in." />
+	<design:attribute name="showGoogleLink" 
+                      label="Show 'Open in Google Maps' Link"
+                      default="true" 
+                      description="If checked, displays a link below the map to open in Google Maps." />
+</design:component>
